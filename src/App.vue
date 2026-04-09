@@ -91,9 +91,9 @@
         </li> -->
         <li v-if="userId">
           <router-link
-           to="/Mi-Perfil"
              class="block py-2.5 px-4 rounded-2xl font-medium whitespace-nowrap hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            @click="closeMenu"
+               to="/Mi-Perfil"
+             @click="closeMenu"
           >
             Mi perfil
           </router-link>
@@ -197,8 +197,8 @@
           </li>  -->
           <li v-if="userId">
             <router-link
-             to="/Mi-Perfil"
               class="block py-2 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              to="/Mi-Perfil"
               @click="closeMenu"
             >
               Mi perfil
@@ -368,12 +368,12 @@
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { db } from "./services/firebase";
 import { onSnapshot, collection, query, where, getDocs } from "firebase/firestore";
-// import Notificaciones from "./components/Notificaciones.vue";
+import Notificaciones from "./components/Notificaciones.vue";
 
 export default {
-  // components: {
-  //   Notificaciones,
-  // },
+  components: {
+    Notificaciones,
+  },
 
   data() {
     return {
@@ -382,13 +382,56 @@ export default {
       userName: null,
       loading: true,
       badgeCount: 0, 
-      // showNotifications: false, 
-      // intervaloVerificacion: null, 
+      showNotifications: false, 
+      intervaloVerificacion: null, 
       logoutMessage: null,
     };
-  }, 
+  },
 
-   methods: {
+  
+
+  mounted() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        this.userId = user.uid;
+        await this.loadUserInfo(user.uid);
+
+        
+        this.suscribirseNotificaciones(user.uid);
+
+       
+        setTimeout(() => {
+          this.verificarNotificacionesIniciales();
+        }, 2000);
+      } else {
+        this.userId = this.userName = null;
+        this.badgeCount = 0;
+      }
+      this.loading = false;
+    });
+    document.addEventListener("click", this.handleClickOutside);
+  },
+
+  async verificarNotificacionesIniciales() {
+    console.log("🔔 Verificando notificaciones iniciales...");
+    const { collection, query, where, getDocs } = await import("firebase/firestore");
+    const { db } = await import("./services/firebase");
+    try {
+     
+      const gastosSnapshot = await getDocs(query(collection(db, "gastos"), where("uid", "==", this.userId)));
+    
+    } catch (error) {
+      console.error("🔔 Error verificando notificaciones iniciales:", error);
+    }
+  },
+
+  beforeUnmount() {
+    document.removeEventListener("click", this.handleClickOutside);
+    if (this.unsubscribeNotificaciones) this.unsubscribeNotificaciones();
+  },
+
+  methods: {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },
@@ -399,16 +442,16 @@ export default {
 
     
 
-    // suscribirseNotificaciones(uid) {
-    //   const notificacionesRef = collection(db, `users/${uid}/notificaciones`);
-    //   const q = query(notificacionesRef, where("leida", "==", false));
+    suscribirseNotificaciones(uid) {
+      const notificacionesRef = collection(db, `users/${uid}/notificaciones`);
+      const q = query(notificacionesRef, where("leida", "==", false));
 
-    //   this.unsubscribeNotificaciones?.();
+      this.unsubscribeNotificaciones?.();
 
-    //   this.unsubscribeNotificaciones = onSnapshot(q, (snapshot) => {
-    //     this.badgeCount = snapshot.size;
-    //   });
-    // },
+      this.unsubscribeNotificaciones = onSnapshot(q, (snapshot) => {
+        this.badgeCount = snapshot.size;
+      });
+    },
 
     toggleNotifications() {
       console.log("Toggle notificaciones:", !this.showNotifications);
@@ -487,97 +530,8 @@ export default {
     },
   },
 };
-
 </script>
-  // mounted() {
-  //   const auth = getAuth();
-  //   onAuthStateChanged(auth, async (user) => {
-  //     if (user) {
-  //       this.userId = user.uid;
-  //       await this.loadUserInfo(user.uid);
 
-        
-  //       this.suscribirseNotificaciones(user.uid);
-
-       
-  //       setTimeout(() => {
-  //         this.verificarNotificacionesIniciales();
-  //       }, 2000);
-  //     } else {
-  //       this.userId = this.userName = null;
-  //       this.badgeCount = 0;
-  //     }
-  //     this.loading = false;
-  //   });
-  //   document.addEventListener("click", this.handleClickOutside);
-  // },
-
-  // async verificarNotificacionesIniciales() {
-  //   console.log("🔔 Verificando notificaciones iniciales...");
-  //   const { collection, query, where, getDocs } = await import("firebase/firestore");
-  //   const { db } = await import("./services/firebase");
-  //   try {
-     
-  //     const gastosSnapshot = await getDocs(query(collection(db, "gastos"), where("uid", "==", this.userId)));
-    
-  //   } catch (error) {
-  //     console.error("🔔 Error verificando notificaciones iniciales:", error);
-  //   }
-  // },
-
-  // beforeUnmount() {
-  //   document.removeEventListener("click", this.handleClickOutside);
-  //   if (this.unsubscribeNotificaciones) this.unsubscribeNotificaciones();
-  // },
-
-
-    
-
-    // suscribirseNotificaciones(uid) {
-    //   const notificacionesRef = collection(db, `users/${uid}/notificaciones`);
-    //   const q = query(notificacionesRef, where("leida", "==", false));
-
-    //   this.unsubscribeNotificaciones?.();
-
-    //   this.unsubscribeNotificaciones = onSnapshot(q, (snapshot) => {
-    //     this.badgeCount = snapshot.size;
-    //   });
-    // },
-
-    // toggleNotifications() {
-    //   console.log("Toggle notificaciones:", !this.showNotifications);
-    //   console.log("UserId actual:", this.userId);
-    //   this.showNotifications = !this.showNotifications;
-    //   console.log("showNotifications después del toggle:", this.showNotifications); // 👈 Y ESTE
-    // },
-
-    
-    // actualizarBadge(count) {
-    //   console.log("Actualizando badge:", count);
-    //   this.badgeCount = count;
-    // },
-
-    // handleClickOutside(event) {
-      
-    //   const menu = this.$refs.menu;
-    //   const btn = this.$refs.menuButton;
-
-    //   if (this.isMenuOpen && menu && !menu.contains(event.target) && btn && !btn.contains(event.target)) {
-    //     this.isMenuOpen = false;
-    //   }
-
-      
-    //   const notifBtn = this.$refs.notificationButton;
-    //   const notifWrapper = this.$refs.notificationWrapper;
-
-    //   if (this.showNotifications && notifWrapper && notifBtn) {
-    //     const notifElement = notifWrapper.$el || notifWrapper;
-
-    //     if (!notifElement.contains(event.target) && !notifBtn.contains(event.target)) {
-    //       this.showNotifications = false;
-    //     }
-    //   }
-    // },
 <style>
 .fade-slide-enter-active,
 .fade-slide-leave-active {

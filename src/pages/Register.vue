@@ -29,7 +29,7 @@
                 @input="validateEmail"
                 @blur="touched.email = true"
               />
-              <span v-if="touched.email" class="absolute right-3 top-1/2 -translate-y-1/2 text-sm">{{ emailIcon }}</span>
+             
             </div>
             <p v-if="touched.email && emailError" class="text-red-400 text-sm mt-1">{{ emailError }}</p>
           </div>
@@ -46,7 +46,7 @@
                 @input="validatePassword"
                 @blur="touched.password = true"
               />
-              <span v-if="touched.password" class="absolute right-3 top-1/2 -translate-y-1/2 text-sm">{{ passwordIcon }}</span>
+             
             </div>
             <p v-if="touched.password && passwordError" class="text-red-400 text-sm mt-1">{{ passwordError }}</p>
 
@@ -70,7 +70,7 @@
                 @input="validateConfirmPassword"
                 @blur="touched.confirmPassword = true"
               />
-              <span v-if="touched.confirmPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-sm">{{ confirmIcon }}</span>
+             
             </div>
             <p v-if="touched.confirmPassword && confirmPasswordError" class="text-red-400 text-sm mt-1">{{ confirmPasswordError }}</p>
           </div>
@@ -85,14 +85,14 @@
             <span v-else>Crear cuenta</span>
           </button>
 
-          <button
+          <!-- <button
             type="button"
             @click="handleGoogleRegister"
             :disabled="googleLoading"
             class="w-full py-3 border border-white/30 rounded-xl font-semibold hover:bg-white/10 transition disabled:opacity-60"
           >
             {{ googleLoading ? 'Conectando con Google...' : 'Registrarme con Google' }}
-          </button>
+          </button> -->
         </form>
 
         <p v-if="errorMessage" class="text-red-400 mt-4 text-sm text-center">{{ errorMessage }}</p>
@@ -141,7 +141,7 @@ export default {
       },
       confirmPassword: '',
       loading: false,
-      googleLoading: false,
+      // googleLoading: false,
       successMessage: '',
       errorMessage: '',
       emailError: '',
@@ -167,15 +167,15 @@ export default {
     },
     emailIcon() {
       if (!this.user.email) return '•';
-      return this.emailError ? '❌' : '✅';
+      return this.emailError ? '❌' : '';
     },
     passwordIcon() {
       if (!this.user.password) return '•';
-      return this.passwordError ? '❌' : '✅';
+      return this.passwordError ? '❌' : '';
     },
     confirmIcon() {
       if (!this.confirmPassword) return '•';
-      return this.confirmPasswordError ? '❌' : '✅';
+      return this.confirmPasswordError ? '❌' : '';
     },
   },
   methods: {
@@ -256,6 +256,10 @@ export default {
         this.successMessage = '¡Cuenta creada con éxito!';
         this.cuentaCreada = true;
 
+        if (window.va) {
+  window.va('track', 'register_success');
+}
+
         this.user = { nombreDeUsuario: '', email: '', password: '' };
         this.confirmPassword = '';
 
@@ -278,36 +282,36 @@ export default {
       }
     },
 
-    async handleGoogleRegister() {
-      this.errorMessage = '';
-      this.successMessage = '';
-      this.googleLoading = true;
-      try {
-        const auth = getAuth();
-        await setPersistence(auth, browserLocalPersistence);
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
+    // async handleGoogleRegister() {
+    //   this.errorMessage = '';
+    //   this.successMessage = '';
+    //   this.googleLoading = true;
+    //   try {
+    //     const auth = getAuth();
+    //     await setPersistence(auth, browserLocalPersistence);
+    //     const provider = new GoogleAuthProvider();
+    //     const result = await signInWithPopup(auth, provider);
 
-        await this.createUserDocIfNeeded({
-          uid: result.user.uid,
-          email: result.user.email || '',
-          nombreDeUsuario: result.user.displayName || '',
-        });
+    //     await this.createUserDocIfNeeded({
+    //       uid: result.user.uid,
+    //       email: result.user.email || '',
+    //       nombreDeUsuario: result.user.displayName || '',
+    //     });
 
-        this.successMessage = 'Registro con Google exitoso.';
-        setTimeout(() => {
-          this.$router.push({ path: '/Monto-Total' });
-        }, 1000);
-      } catch (error) {
-        if (error.code === 'auth/popup-closed-by-user') {
-          this.errorMessage = 'Cerraste la ventana de Google antes de completar el registro.';
-        } else {
-          this.errorMessage = 'No se pudo registrar con Google. Probá nuevamente.';
-        }
-      } finally {
-        this.googleLoading = false;
-      }
-    },
+    //     this.successMessage = 'Registro con Google exitoso.';
+    //     setTimeout(() => {
+    //       this.$router.push({ path: '/Monto-Total' });
+    //     }, 1000);
+    //   } catch (error) {
+    //     if (error.code === 'auth/popup-closed-by-user') {
+    //       this.errorMessage = 'Cerraste la ventana de Google antes de completar el registro.';
+    //     } else {
+    //       this.errorMessage = 'No se pudo registrar con Google. Probá nuevamente.';
+    //     }
+    //   } finally {
+    //     this.googleLoading = false;
+    //   }
+    // },
   },
 };
 </script>

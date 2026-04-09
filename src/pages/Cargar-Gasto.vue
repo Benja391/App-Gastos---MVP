@@ -372,6 +372,10 @@ export default {
         this.message = "Gasto registrado correctamente.";
         this.messageClass = "bg-green-100 border border-green-400 text-green-700 font-semibold";
 
+        if (window.va) {
+  window.va('track', 'expense_created');
+}
+
         setTimeout(() => {
           this.showToast = false;
           this.saveSuccessAnimation = false;

@@ -29,9 +29,7 @@
                 @input="validateEmail"
                 @blur="touched.email = true"
               />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm" v-if="touched.email">
-                {{ emailIcon }}
-              </span>
+            
             </div>
             <p v-if="touched.email && emailError" class="text-red-400 text-sm mt-1">{{ emailError }}</p>
           </div>
@@ -48,9 +46,7 @@
                 @input="validatePassword"
                 @blur="touched.password = true"
               />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm" v-if="touched.password">
-                {{ passwordIcon }}
-              </span>
+             
             </div>
             <p v-if="touched.password && passwordError" class="text-red-400 text-sm mt-1">{{ passwordError }}</p>
           </div>
@@ -78,14 +74,14 @@
             {{ loading ? 'Ingresando...' : 'Iniciá sesión' }}
           </button>
 
-          <button
+          <!-- <button
             type="button"
             @click="handleGoogleLogin"
             :disabled="googleLoading"
             class="w-full py-3 border border-white/30 rounded-xl font-semibold hover:bg-white/10 transition disabled:opacity-60"
           >
             {{ googleLoading ? 'Conectando con Google...' : 'Continuar con Google' }}
-          </button>
+          </button> -->
         </form>
 
         <p v-if="errorMessage" class="text-red-400 mt-4 text-sm text-center">{{ errorMessage }}</p>
@@ -124,9 +120,9 @@ export default {
         email: '',
         password: '',
       },
-      rememberMe: true,
+      rememberMe: false,
       loading: false,
-      googleLoading: false,
+      // googleLoading: false,
       resetLoading: false,
       errorMessage: '',
       successMessage: '',
@@ -141,11 +137,11 @@ export default {
   computed: {
     emailIcon() {
       if (!this.user.email) return '•';
-      return this.emailError ? '❌' : '✅';
+      return this.emailError ? '❌' : '';
     },
     passwordIcon() {
       if (!this.user.password) return '•';
-      return this.passwordError ? '❌' : '✅';
+      return this.passwordError ? '❌' : '';
     },
   },
   mounted() {
@@ -208,12 +204,22 @@ export default {
         }
 
         if (this.rememberMe) {
-          localStorage.setItem('remembered_login_email', this.user.email);
+          let emails = JSON.parse(localStorage.getItem('saved_emails')) || [];
+
+if (!emails.includes(this.user.email)) {
+  emails.push(this.user.email);
+}
+
+localStorage.setItem('saved_emails', JSON.stringify(emails));
         } else {
           localStorage.removeItem('remembered_login_email');
         }
 
         this.successMessage = '¡Bienvenido! Inicio de sesión exitoso.';
+        // 👇 AGREGÁ
+if (window.va) {
+  window.va('track', 'login_success');
+}
         setTimeout(() => {
           this.$router.push({ path: '/Monto-Total' });
         }, 1200);
@@ -234,30 +240,30 @@ export default {
       }
     },
 
-    async handleGoogleLogin() {
-      this.errorMessage = '';
-      this.successMessage = '';
-      this.googleLoading = true;
-      try {
-        const auth = getAuth();
-        await setPersistence(auth, this.rememberMe ? browserLocalPersistence : browserSessionPersistence);
-        const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
+    // async handleGoogleLogin() {
+    //   this.errorMessage = '';
+    //   this.successMessage = '';
+    //   this.googleLoading = true;
+    //   try {
+    //     const auth = getAuth();
+    //     await setPersistence(auth, this.rememberMe ? browserLocalPersistence : browserSessionPersistence);
+    //     const provider = new GoogleAuthProvider();
+    //     await signInWithPopup(auth, provider);
 
-        this.successMessage = 'Ingreso con Google exitoso.';
-        setTimeout(() => {
-          this.$router.push({ path: '/Monto-Total' });
-        }, 1000);
-      } catch (error) {
-        if (error.code === 'auth/popup-closed-by-user') {
-          this.errorMessage = 'Cerraste la ventana de Google antes de completar el inicio.';
-        } else {
-          this.errorMessage = 'No se pudo iniciar con Google. Probá nuevamente.';
-        }
-      } finally {
-        this.googleLoading = false;
-      }
-    },
+    //     this.successMessage = 'Ingreso con Google exitoso.';
+    //     setTimeout(() => {
+    //       this.$router.push({ path: '/Monto-Total' });
+    //     }, 1000);
+    //   } catch (error) {
+    //     if (error.code === 'auth/popup-closed-by-user') {
+    //       this.errorMessage = 'Cerraste la ventana de Google antes de completar el inicio.';
+    //     } else {
+    //       this.errorMessage = 'No se pudo iniciar con Google. Probá nuevamente.';
+    //     }
+    //   } finally {
+    //     this.googleLoading = false;
+    //   }
+    // },
 
     async handleResetPassword() {
       this.errorMessage = '';
@@ -274,7 +280,7 @@ export default {
       try {
         const auth = getAuth();
         await sendPasswordResetEmail(auth, this.user.email);
-        this.successMessage = 'Te enviamos un correo para restablecer tu contraseña.';
+        this.successMessage = 'Te enviamos un correo para restablecer tu contraseña (revisar spam).';
       } catch (error) {
         if (error.code === 'auth/user-not-found') {
           this.errorMessage = 'No existe una cuenta con ese correo.';

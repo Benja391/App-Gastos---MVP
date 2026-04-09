@@ -151,13 +151,22 @@ export default {
     },
   },
 
-  async mounted() {
-    onAuthStateChanged(getAuth(), async (user) => {
-      if (!user) return;
-      this.userId = user.uid;
+mounted() {
+  onAuthStateChanged(getAuth(), async (user) => {
+    if (!user) return;
 
-      this.listenForGastos();
-    });
-  },
+    this.userId = user.uid;
+
+    // ✅ Evita duplicados
+    if (!sessionStorage.getItem("user_active_tracked")) {
+      if (window.va) {
+        window.va('track', 'user_active');
+      }
+      sessionStorage.setItem("user_active_tracked", "true");
+    }
+
+    this.listenForGastos();
+  });
+ },
 };
 </script>

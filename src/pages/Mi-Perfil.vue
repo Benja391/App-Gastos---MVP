@@ -104,7 +104,6 @@ export default {
     if (this.userId) {
       await this.loadUserProfile();
       await this.calcularTotalGastado();
-      await this.loadNotifications(); 
     }
   },
   methods: {
