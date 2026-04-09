@@ -2,6 +2,9 @@ import './style.css';
 import App from './App.vue';
 import { createApp  } from 'vue';
 import router from './router/router';
+import { injectSpeedInsights } from '@vercel/speed-insights';
+
+injectSpeedInsights();
 
 const app = createApp(App);
 

@@ -11,11 +11,13 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
     "autoprefixer": "^10.4.20",
+    "baseline-browser-mapping": "^2.10.16",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.10"
   },
   "dependencies": {
+    "@vercel/speed-insights": "^2.0.0",
     "chart.js": "^4.4.9",
     "docx": "^9.5.1",
     "file-saver": "^2.0.5",
