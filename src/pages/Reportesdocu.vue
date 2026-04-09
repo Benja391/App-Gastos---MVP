@@ -1,5 +1,5 @@
 <template>
-  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] px-4 py-10 mt-8">
+  <!-- <section class="flex items-center justify-center min-h-screen bg-[#08a04b] px-4 py-10 mt-8">
     <div
       class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl border border-white/20 
              w-full max-w-5xl p-8 grid gap-8 mt-1 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]
@@ -55,10 +55,10 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 </template>
 
-<script>
+<!-- <script>
 import { ref, onMounted } from "vue";
 import { getAuth } from "firebase/auth";
 import {
@@ -273,8 +273,8 @@ export default {
     };
   },
 };
-</script>
-
+</script> -->
+<!-- 
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
@@ -284,4 +284,4 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
-</style>
+</style> -->
