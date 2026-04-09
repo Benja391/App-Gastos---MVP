@@ -1,5 +1,5 @@
 <template>
-  <div class="payment-calendar min-h-screen bg-[#08a04b] text-gray-900 p-6 md:p-10 mt-8">
+  <!-- <div class="payment-calendar min-h-screen bg-[#08a04b] text-gray-900 p-6 md:p-10 mt-8">
    
     <div
       v-if="showFloatingMessage"
@@ -357,12 +357,12 @@
         Volvé a monto total
       </button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 
 
-<script>
+<!-- <script>
 import { getAuth } from "firebase/auth";
 import {
   getFirestore,
@@ -998,10 +998,10 @@ export default {
     }
   }
 };
-</script>
+</script> -->
 
 
-<style scoped>
+<!-- <style scoped>
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -1034,4 +1034,4 @@ export default {
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-</style>
+</style> -->

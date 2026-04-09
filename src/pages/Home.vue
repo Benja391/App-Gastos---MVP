@@ -12,7 +12,7 @@
             </span>
 
             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-5">
-              Bienvenido a <span class="text-black">GASTOS</span>
+            
             </h1>
 
             <p class="text-green-100 text-lg md:text-xl leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">

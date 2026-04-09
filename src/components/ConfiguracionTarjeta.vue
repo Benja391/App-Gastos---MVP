@@ -1,5 +1,5 @@
 <template>
-  
+<!--   
   <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
  
     <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-4xl p-8 grid gap-10 overflow-hidden  shadow-[0_8px_30px_rgba(0,0,0,0.35)]
@@ -264,13 +264,13 @@
       </button>
     </div>
   </div>
-</div>
+</div> -->
   
 </template>
 
 
 
-<script setup>
+<!-- <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import {
@@ -466,4 +466,4 @@ onMounted(() => {
     if (user) { await findUserDocumentId(user.uid); await loadCards() }
   })
 })
-</script>
+</script> -->

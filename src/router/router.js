@@ -20,7 +20,7 @@ const routes = [
     { path: '/Registrarse',    component: Register },  
     { path: '/Monto-Total',    component: MontoTotal,  meta:{ requiresAuth: true }},
     { path: '/Cargar-Gasto',   component: CargarGasto,  meta:{ requiresAuth: true }},
-    { path: '/Presupuestos',   component: Presupuestos, meta:{ requiresAuth: true }},
+    // { path: '/Presupuestos',   component: Presupuestos, meta:{ requiresAuth: true }},
      { path: '/Mi-Perfil',      component: MiPerfil, meta:{ requiresAuth: true }},
     { path: '/Configuracion-Tarjeta', component: ConfiguracionTarjeta, meta:{ requiresAuth: true }},
     { path: '/Historial-Gastos', component: HistorialGastos, meta:{ requiresAuth: true }},

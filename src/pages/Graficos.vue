@@ -58,14 +58,14 @@
           </div>
         </div>
      
-          <div class="flex justify-center mt-10">
+          <!-- <div class="flex justify-center mt-10">
             <button
               @click="$router.push('/Reportes-Docu')"
               class="px-8 py-4 bg-green-600 text-white font-bold rounded-2xl shadow-md hover:bg-green-700 transition text-lg"
             >
               Descargá reportes
             </button>
-          </div>
+          </div> -->
         </div>
     </div>
   </section>

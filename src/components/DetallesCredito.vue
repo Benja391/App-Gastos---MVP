@@ -1,5 +1,5 @@
 <template>
-  <div class="credit-card-details grid gap-6 w-full">
+  <!-- <div class="credit-card-details grid gap-6 w-full">
 
     
     <div class="grid gap-2 w-full">
@@ -47,10 +47,10 @@
       </p>
     </div>
 
-  </div>
+  </div> -->
 </template>
 
-<script>
+<!-- <script>
 export default {
   name: "CreditCardDetails",
   props: {
@@ -76,4 +76,4 @@ export default {
     }
   }
 };
-</script>
+</script> -->

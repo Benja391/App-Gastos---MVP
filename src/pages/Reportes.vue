@@ -1,5 +1,5 @@
 <template>
-    <section class="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-black">
+    <!-- <section class="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-black">
       <div class="w-full max-w-4xl p-8 bg-white rounded-lg  shadow-[0_8px_30px_rgba(0,0,0,0.35)]
          hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
          transition-shadow duration-500">
@@ -25,10 +25,10 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
   </template>
   
-  <script>
+  <!-- <script>
   import ChartComponent from "../components/ChartComponent.vue";
   
   export default {
@@ -91,4 +91,4 @@
     },
   };
   </script>
-  
+   -->

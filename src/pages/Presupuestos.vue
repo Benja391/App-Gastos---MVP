@@ -1,23 +1,22 @@
 <template>
-  <!-- CONTENEDOR VERDE - solo fondo -->
-  <section class="min-h-screen bg-gradient-to-br from-emerald-600 via-green-600 to-teal-700 px-4 py-16">
+  
+  <!-- <section class="min-h-screen bg-gradient-to-br from-emerald-600 via-green-600 to-teal-700 px-4 py-16">
    
-    <!-- CAJA BLANCA PRINCIPAL -->
+    
     <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl border border-white/20 w-full max-w-6xl mx-auto p-8 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)] transition-shadow duration-500 overflow-hidden">
       
-      <!-- Elementos decorativos de fondo -->
+    
       <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full -mr-32 -mt-32 pointer-events-none"></div>
       <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-200/20 to-transparent rounded-full -ml-24 -mb-24 pointer-events-none"></div>
       
-      <!-- TODO EL CONTENIDO DENTRO DEL RELATIVE Z-10 -->
       <div class="relative z-10">
         
-        <!-- HEADER -->
+      
         <div class="text-center mb-8">
           <BaseHeading class="mb-3">Control de gastos</BaseHeading>
           <p class="text-gray-600 text-lg mb-4">Definí límites por categoría y seguí tu avance en tiempo real</p>
           
-          <!-- Info box -->
+        
           <div class="inline-flex items-start gap-3 bg-blue-50 border border-blue-200 px-5 py-3 rounded-xl text-sm text-blue-900 max-w-2xl mx-auto">
             <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
@@ -26,7 +25,7 @@
           </div>
         </div>
 
-        <!-- ONBOARDING -->
+  
         <div
           v-if="showOnboarding"
           class="mb-6 bg-amber-50 border-2 border-amber-200 p-5 rounded-2xl"
@@ -55,12 +54,12 @@
           </div>
         </div>
        
-        <!-- MENSAJE -->
+     
         <div v-if="message" class="mb-6 p-4 rounded-2xl text-black font-medium border-l-4 shadow-sm" :class="messageClass">
           {{ message }}
         </div>
 
-        <!-- LOADER -->
+       
         <div v-if="isLoading" class="flex justify-center items-center mb-8">
           <div class="relative">
             <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
@@ -68,7 +67,7 @@
           </div>
         </div>
 
-        <!-- FORMULARIO -->
+       
         <div class="bg-gradient-to-r from-gray-50 to-green-50/30 p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 mb-8">  
           <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
             <div class="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -146,7 +145,7 @@
           </form>
         </div>
 
-        <!-- LISTA DE PRESUPUESTOS -->
+        
         <div class="mt-8">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-3">
@@ -210,7 +209,7 @@
   </button>
               </div>
 
-              <!-- Barra de progreso -->
+          
               <div class="mb-4">
                 <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
                   <span>{{ formatCurrency(getTotalGastado(budget.id)) }} gastados</span>
@@ -237,7 +236,7 @@
                 </p>
               </div>
 
-              <!-- Desglose -->
+            
               <div 
                 v-if="activeDesglose === budget.id" 
                 class="mt-6 bg-gradient-to-r from-green-50 to-emerald-50/50 p-6 rounded-xl border border-green-100 animate-fadeIn"
@@ -271,7 +270,7 @@
                   </div>
                 </div>
 
-                <!-- Resumen -->
+                
                 <div class="mt-6 pt-4 border-t border-green-200 text-sm text-gray-700 space-y-1">
                   <div class="flex justify-between">
                     <span class="font-semibold">Total presupuestado:</span>
@@ -293,7 +292,6 @@
               </div>
             </div>
 
-            <!-- Estado vacío -->
             <div v-if="!budgets.length && !isLoading" class="text-center py-12">
               <svg class="w-20 h-20 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
@@ -304,15 +302,15 @@
           </div>
         </div>
 
-      </div><!-- Fin relative z-10 -->
-    </div><!-- Fin caja blanca -->
-  </section>
+      </div>
+    </div>
+  </section> -->
 </template>
 
 
 
 
-<script>
+<!-- <script>
 import { ref, onMounted } from 'vue';
 import { getAuth } from 'firebase/auth';
 import { watch } from 'vue';
@@ -576,8 +574,8 @@ const cancelDelete = () => {
 }
 
 };
-</script>
-<style scoped>
+</script> -->
+<!-- <style scoped>
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -610,4 +608,4 @@ const cancelDelete = () => {
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
 }
-</style>
+</style> -->
