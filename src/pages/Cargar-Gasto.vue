@@ -128,15 +128,6 @@
         </div>
       </form>
     </div>
-
-    <transition name="fade-up">
-      <div
-        v-if="showToast"
-        class="fixed top-6 right-6 z-50 bg-green-600 text-white px-5 py-3 rounded-xl shadow-xl font-semibold"
-      >
-        ✅ Gasto guardado correctamente
-      </div>
-    </transition>
   </section>
 </template>
 

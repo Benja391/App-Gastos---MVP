@@ -54,7 +54,7 @@
              class="py-2.5 whitespace-nowrap px-4 inline-block rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/monto-total"
             @click="closeMenu"
-            >Ingresos totales</router-link
+            >Resumen</router-link
           >
         </li>
         <li>
@@ -160,7 +160,7 @@
               @click="closeMenu"
               class="block py-2 px-4 rounded-2xl hover:bg-green-600 hover:text-white transition-all duration-300 font-medium"
               to="/monto-total"
-              >Ingresos totales</router-link
+              >Resumen</router-link
             >
           </li>
           <li>

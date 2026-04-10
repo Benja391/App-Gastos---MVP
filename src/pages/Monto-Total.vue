@@ -19,26 +19,47 @@
           {{ floatingMessage }}
         </div>
 
-        <!-- BOTON AGREGAR GASTO -->
-    
-          
-
         <!-- ÚLTIMOS GASTOS -->
         <div v-if="userId" class="bg-white rounded-2xl border border-gray-100 shadow-md p-6">
           <h2 class="text-xl font-bold text-green-700 mb-4">Últimos 3 gastos</h2>
 
           <ul v-if="latestGastos.length" class="space-y-3">
-            <li v-for="gasto in latestGastos" :key="gasto.id" class="bg-gray-50 border border-gray-200 rounded-xl p-3">
-              <p class="text-sm font-semibold text-gray-800">{{ gasto.name || 'Sin nombre' }}</p>
-              <p class="text-sm text-gray-600">{{ gasto.category || 'Sin categoría' }}</p>
-              <p class="text-sm font-bold text-red-600">- {{ formatCurrency(gasto.amount) }}</p>
+            <li
+              v-for="gasto in latestGastos"
+              :key="gasto.id"
+              class="bg-gray-50 border border-gray-200 rounded-xl p-3"
+            >
+              <!-- HEADER -->
+              <div class="flex justify-between items-start">
+                <p class="text-sm font-semibold text-gray-800">
+                  {{ gasto.name || 'Sin nombre' }}
+                </p>
+
+                <!-- 🔥 BOTÓN ARRIBA DERECHA -->
+                <button
+                  @click="openDeleteModal(gasto.id)"
+                  class="text-xs text-red-500 hover:text-white hover:bg-red-500 px-2 py-1 rounded-lg transition"
+                >
+                  Eliminar
+                </button>
+              </div>
+
+              <p class="text-sm text-gray-600 mt-1">
+                {{ gasto.category || 'Sin categoría' }}
+              </p>
+
+              <p v-if="gasto.description" class="text-sm text-gray-700 mt-1">
+                {{ gasto.description }}
+              </p>
+
+              <p class="text-sm font-bold text-red-600 mt-1">
+                - {{ formatCurrency(gasto.amount) }}
+              </p>
             </li>
           </ul>
-
-          <p v-else class="text-sm text-gray-500">Todavía no hay gastos cargados.</p>
         </div>
 
-        <!-- LISTA COMPLETA DE GASTOS -->
+        <!-- TODOS LOS GASTOS -->
         <div v-if="userId" class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
           <h2 class="text-xl font-bold text-gray-800 mb-4">Todos los gastos</h2>
 
@@ -48,19 +69,66 @@
               :key="gasto.id"
               class="bg-gray-50 border border-gray-200 p-3 rounded-xl shadow-sm text-sm"
             >
-              <p class="font-medium text-gray-800">
-                {{ gasto.name }} - {{ formatCurrency(gasto.amount) }}
+              <div class="flex justify-between items-start">
+                <p class="font-medium text-gray-800">
+                  {{ gasto.name }} - {{ formatCurrency(gasto.amount) }}
+                </p>
+
+                <button
+                  @click="openDeleteModal(gasto.id)"
+                  class="text-xs text-red-500 hover:text-white hover:bg-red-500 px-2 py-1 rounded-lg transition"
+                >
+                  Eliminar
+                </button>
+              </div>
+
+              <p class="text-gray-600 italic">
+                {{ gasto.category }}
               </p>
-              <p class="text-gray-600 italic">{{ gasto.category }}</p>
-              <p class="text-gray-500 text-xs mt-1">{{ formatDate(gasto.createdAt) }}</p>
+
+              <p v-if="gasto.description" class="text-sm text-gray-700 mt-1">
+                {{ gasto.description }}
+              </p>
+
+              <p class="text-gray-500 text-xs mt-1">
+                {{ formatDate(gasto.createdAt) }}
+              </p>
             </li>
           </ul>
-
-          <p v-else class="text-gray-500 text-sm">No hay gastos registrados aún.</p>
         </div>
 
       </div>
     </div>
+
+    <!-- 🔥 MODAL ELIMINAR -->
+    <div v-if="showDeleteModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+        <h3 class="text-lg font-bold text-gray-800 mb-2">
+          Eliminar gasto
+        </h3>
+
+        <p class="text-gray-600 mb-6">
+          ¿Seguro que querés eliminar este gasto? Esta acción no se puede deshacer.
+        </p>
+
+        <div class="flex justify-end gap-3">
+          <button
+            @click="closeDeleteModal"
+            class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
+          >
+            Cancelar
+          </button>
+
+          <button
+            @click="confirmDelete"
+            class="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
+          >
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+
   </section>
 </template>
 
@@ -68,14 +136,12 @@
 import { db } from "../services/firebase";
 import {
   doc,
-  setDoc,
   onSnapshot,
   collection,
   query,
   where,
   orderBy,
   deleteDoc,
-  getDocs,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -85,19 +151,11 @@ export default {
       floatingMessage: null,
       showFloatingMessage: false,
       userId: null,
-
-      // ❌ INGRESOS (comentado)
-      // tempInitialAmount: null,
-      // initialAmount: 0,
-      // remainingAmount: 0,
-      // additionalAmounts: [],
-      // tempAdditionalAmount: null,
-      // tempAdditionalDescription: "",
-      // initialAmountError: false,
-      // additionalAmountError: false,
-      // additionalDescriptionError: false,
-
       gastos: [],
+
+      // 🔥 MODAL STATE
+      showDeleteModal: false,
+      gastoToDelete: null,
     };
   },
 
@@ -109,29 +167,21 @@ export default {
 
   methods: {
     formatCurrency(value) {
-      const amount = parseFloat(value);
-      if (isNaN(amount)) return "Monto inválido";
       return new Intl.NumberFormat("es-AR", {
         style: "currency",
         currency: "ARS",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(amount);
+      }).format(value);
     },
 
     formatDate(tsOrIso) {
-      if (!tsOrIso) return "Fecha desconocida";
       if (tsOrIso?.toDate) return tsOrIso.toDate().toLocaleDateString("es-AR");
       return new Date(tsOrIso).toLocaleDateString("es-AR");
-    },
-
-    goToAddExpense() {
-      this.$router.push("/cargar-gasto");
     },
 
     mostrarMensajeTemporal(mensaje) {
       this.floatingMessage = mensaje;
       this.showFloatingMessage = true;
+
       setTimeout(() => {
         this.showFloatingMessage = false;
         this.floatingMessage = null;
@@ -146,27 +196,52 @@ export default {
       );
 
       onSnapshot(gastosRef, (querySnapshot) => {
-        this.gastos = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        this.gastos = querySnapshot.docs.map((d) => ({
+          id: d.id,
+          ...d.data(),
+        }));
       });
+    },
+
+    // 🔥 MODAL CONTROL
+    openDeleteModal(id) {
+      this.gastoToDelete = id;
+      this.showDeleteModal = true;
+    },
+
+    closeDeleteModal() {
+      this.showDeleteModal = false;
+      this.gastoToDelete = null;
+    },
+
+    async confirmDelete() {
+      try {
+        await deleteDoc(doc(db, "gastos", this.gastoToDelete));
+        this.mostrarMensajeTemporal("Gasto eliminado correctamente");
+      } catch (error) {
+        console.error(error);
+        this.mostrarMensajeTemporal("Error al eliminar");
+      }
+
+      this.closeDeleteModal();
     },
   },
 
-mounted() {
-  onAuthStateChanged(getAuth(), async (user) => {
-    if (!user) return;
+  mounted() {
+    onAuthStateChanged(getAuth(), async (user) => {
+      if (!user) return;
 
-    this.userId = user.uid;
+      this.userId = user.uid;
 
-    // ✅ Evita duplicados
-    if (!sessionStorage.getItem("user_active_tracked")) {
-      if (window.va) {
-        window.va('track', 'user_active');
+      if (!sessionStorage.getItem("user_active_tracked")) {
+        if (window.va) {
+          window.va("track", "user_active");
+        }
+        sessionStorage.setItem("user_active_tracked", "true");
       }
-      sessionStorage.setItem("user_active_tracked", "true");
-    }
 
-    this.listenForGastos();
-  });
- },
+      this.listenForGastos();
+    });
+  },
 };
 </script>
