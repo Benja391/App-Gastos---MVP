@@ -166,12 +166,19 @@ export default {
   },
 
   methods: {
-    formatCurrency(value) {
-      return new Intl.NumberFormat("es-AR", {
-        style: "currency",
-        currency: "ARS",
-      }).format(value);
-    },
+   formatCurrency(value) {
+  const amount = parseFloat(value);
+  if (isNaN(amount)) return "Monto inválido";
+
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })
+  .format(amount)
+  .replace(/\s/g, ""); // 👈 esto elimina el espacio entre $ y número
+},
 
     formatDate(tsOrIso) {
       if (tsOrIso?.toDate) return tsOrIso.toDate().toLocaleDateString("es-AR");
