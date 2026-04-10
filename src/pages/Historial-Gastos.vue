@@ -68,7 +68,7 @@
         <div v-if="paginatedExpenses.length" class="grid gap-3 mt-3 max-h-[620px] overflow-y-auto pr-2">
           <div v-for="exp in paginatedExpenses" :key="exp.id" class="bg-white border p-4 rounded-xl">
 
-            <h3 class="font-bold">🧾 {{ exp.name }}</h3>
+            <h3 class="font-bold">{{ exp.name }}</h3>
             <p>{{ exp.category }}</p>
             <p class="text-red-600">{{ formatCurrency(exp.amount) }}</p>
 
@@ -180,11 +180,18 @@ export default {
     },
 
     formatCurrency(value) {
-      return new Intl.NumberFormat("es-AR", {
-        style: "currency",
-        currency: "ARS",
-      }).format(value);
-    },
+  const amount = parseFloat(value);
+  if (isNaN(amount)) return "Monto inválido";
+
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })
+  .format(amount)
+  .replace(/\s/g, ""); // 👈 saca el espacio entre $ y número
+},
   },
 
   mounted() {
@@ -201,3 +208,4 @@ export default {
   },
 };
 </script>
+
