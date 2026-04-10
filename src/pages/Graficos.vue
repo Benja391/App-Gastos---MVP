@@ -112,7 +112,7 @@ import BaseHeading from '../components/BaseHeading.vue';
             legend: { position: 'bottom', labels: { boxWidth: 14, usePointStyle: true } },
             tooltip: {
               callbacks: {
-                label: (ctx) => `${ctx.dataset.label}: $ ${Number(ctx.raw || 0).toLocaleString('es-AR')}`
+                label: (ctx) => `${ctx.dataset.label}: ${this.formatCurrency(ctx.raw)}`
               }
             }
           }
@@ -124,7 +124,7 @@ import BaseHeading from '../components/BaseHeading.vue';
             legend: { position: 'bottom', labels: { boxWidth: 14, usePointStyle: true } },
             tooltip: {
               callbacks: {
-                label: (ctx) => `${ctx.dataset.label}: $ ${Math.round(ctx.raw || 0).toLocaleString('es-AR')}`
+                label: (ctx) => `${ctx.dataset.label}: ${this.formatCurrency(ctx.raw)}`
               }
             }
           },
@@ -142,7 +142,7 @@ import BaseHeading from '../components/BaseHeading.vue';
                   const data = ctx.dataset.data;
                   const total = data.reduce((sum, x) => sum + x, 0);
                   const pct = ((v/total)*100).toFixed(1);
-                  return `${ctx.label}: $ ${v.toLocaleString()} (${pct}%)`;
+                 return `${ctx.label}: ${this.formatCurrency(v)} (${pct}%)`;
                 }
               }
             }
@@ -160,7 +160,7 @@ import BaseHeading from '../components/BaseHeading.vue';
                   const data = ctx.dataset.data;
                   const total = data.reduce((sum, x) => sum + x, 0);
                   const pct = Math.round((v/total)*100);
-                  return `${ctx.label}: $ ${Math.round(v).toLocaleString()} (${pct}%)`;
+                  return `${ctx.label}: ${this.formatCurrency(v)} (${pct}%)`;
                 }
               }
             }
@@ -190,6 +190,20 @@ import BaseHeading from '../components/BaseHeading.vue';
           this.initialMonthlyBudget = settingsSnap.data().initialAmount || 0;
         }
       },
+
+      formatCurrency(value) {
+  const amount = parseFloat(value);
+  if (isNaN(amount)) return "$0";
+
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })
+  .format(amount)
+  .replace(/\s/g, ""); // 🔥 clave
+},
   
       async fetchGastos() {
         const user = getAuth().currentUser;
