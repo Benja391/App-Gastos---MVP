@@ -129,6 +129,25 @@
       </div>
     </div>
 
+<!-- 🚀 BOTÓN PRINCIPAL FAB (Floating Action Button) -->
+<button
+  @click="goToAddExpense"
+  class="group fixed bottom-8 right-8 bg-gradient-to-r from-green-500 to-emerald-600 text-white pl-6 pr-6 py-4 rounded-full shadow-2xl hover:shadow-green-500/50 hover:scale-110 active:scale-95 transition-all duration-300 z-50 flex items-center gap-3 animate-pulse-slow"
+>
+  <!-- Ícono con animación -->
+  <div class="relative">
+    <svg class="w-6 h-6 transition-transform group-hover:rotate-90 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    </svg>
+  </div>
+  
+  <!-- Texto -->
+  <span class="font-bold text-base hidden sm:inline">Cargar gasto</span>
+  
+  <!-- Ripple effect (círculo decorativo) -->
+  <div class="absolute inset-0 rounded-full bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-500"></div>
+</button>
+
   </section>
 </template>
 
@@ -180,10 +199,22 @@ export default {
   .replace(/\s/g, ""); // 👈 esto elimina el espacio entre $ y número
 },
 
+goToAddExpense() {
+  this.$router.push('/cargar-gasto'); // 👈 ajustá la ruta si es otra
+},
     formatDate(tsOrIso) {
-      if (tsOrIso?.toDate) return tsOrIso.toDate().toLocaleDateString("es-AR");
-      return new Date(tsOrIso).toLocaleDateString("es-AR");
-    },
+  let date;
+
+  if (tsOrIso?.toDate) {
+    date = tsOrIso.toDate();
+  } else {
+    date = new Date(tsOrIso);
+  }
+
+  return date.toLocaleDateString("es-AR", {
+    timeZone: "America/Argentina/Buenos_Aires"
+  });
+},
 
     mostrarMensajeTemporal(mensaje) {
       this.floatingMessage = mensaje;
@@ -252,3 +283,18 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@keyframes pulse-slow {
+  0%, 100% {
+    box-shadow: 0 10px 40px rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 10px 60px rgba(34, 197, 94, 0.6);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+</style>

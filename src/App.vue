@@ -58,14 +58,6 @@
           >
         </li>
         <li>
-          <button
-            @click="irACargarGasto"
-          class="py-2.5 px-5 inline-block whitespace-nowrap rounded-xl font-medium text-green-700 border border-emerald-300 bg-white hover:bg-green-100 transition duration-200 shadow-sm hover:shadow"
-          >
-            <span class="flex items-center gap-2">Cargar gasto</span>
-          </button>
-        </li>
-        <li>
           <router-link
                     class="py-2.5 whitespace-nowrap px-4 inline-block rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/Historial-Gastos"
@@ -163,14 +155,7 @@
               >Resumen</router-link
             >
           </li>
-          <li>
-            <button
-              @click="() => { irACargarGasto(); closeMenu(); }"
-              class="py-2 px-5 inline-block whitespace-nowrap rounded-xl font-medium text-green-700 border bg-white hover:bg-green-100 transition duration-200"
-            >
-              <span class="flex items-center gap-2">Cargar gasto</span>
-            </button>
-          </li>
+       
           <li class="w-full text-right">
             <router-link
               @click="closeMenu"
@@ -525,9 +510,7 @@ export default {
 },
 
 
-    irACargarGasto() {
-      this.$router.push("/cargar-gasto");
-    },
+   
   },
 };
 </script>
