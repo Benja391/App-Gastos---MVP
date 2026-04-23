@@ -346,6 +346,7 @@
         </div>
       </div>
     </footer>
+    <Analytics />
   </template>
 
 
@@ -354,10 +355,12 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { db } from "./services/firebase";
 import { onSnapshot, collection, query, where, getDocs } from "firebase/firestore";
 import Notificaciones from "./components/Notificaciones.vue";
+import { Analytics } from '@vercel/analytics/vue';
 
 export default {
   components: {
     Notificaciones,
+    Analytics,
   },
 
   data() {
